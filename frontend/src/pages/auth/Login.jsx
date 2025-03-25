@@ -5,17 +5,21 @@ import { useAuth } from "../../context/AuthContext";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await login(email, password);
       navigate("/admin/dashboard");
     } catch (e) {
       setError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,8 +82,16 @@ const Login = () => {
             <div className="text-error text-sm text-center">{error}</div>
           )}
 
-          <button type="submit" className="btn btn-primary w-full">
-            Sign in
+          <button
+            type="submit"
+            className="btn btn-primary w-full"
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="loading loading-spinner loading-sm"></span>
+            ) : (
+              "Sign in"
+            )}
           </button>
         </form>
       </div>

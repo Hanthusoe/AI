@@ -3,7 +3,7 @@
 
 /* Add these custom styles for the sidebar */
 .menu .active {
-  @apply bg-base-200;
+  @apply bg-primary;
 }
 
 .menu a,

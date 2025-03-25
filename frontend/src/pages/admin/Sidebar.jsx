@@ -1,21 +1,78 @@
-import { CalendarCheck2, LayoutDashboard, LogOut, MessageCircleQuestion, TableOfContents } from "lucide-react";
+import {
+  Archive,
+  CalendarCheck2,
+  LayoutDashboard,
+  LogOut,
+  MessageCircleQuestion,
+  Siren,
+  TableOfContents,
+  Users,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useEffect } from "react";
 
 const Sidebar = () => {
   const location = useLocation();
+  const { logout, userData } = useAuth();
+
+  useEffect(() => {
+    console.log(userData)
+  })
 
   const isActive = (path) => {
     return location.pathname.includes(path);
   };
 
-  const { logout } = useAuth();
+  const menuItems = [
+    {
+      path: "/admin/dashboard",
+      label: "Dashboard",
+      icon: <LayoutDashboard size={20} />,
+      allowedRoles: ["admin", "staff"],
+    },
+    {
+      path: "/admin/inquiries",
+      label: "Inquiries",
+      icon: <MessageCircleQuestion size={20} />,
+      allowedRoles: ["admin", "staff"],
+    },
+    {
+      path: "/admin/blogs",
+      label: "Blogs",
+      icon: <TableOfContents size={20} />,
+      allowedRoles: ["admin", "staff"],
+    },
+    {
+      path: "/admin/events",
+      label: "Events",
+      icon: <CalendarCheck2 size={20} />,
+      allowedRoles: ["admin", "staff"],
+    },
+    {
+      path: "/admin/industries",
+      label: "Industries",
+      icon: <Archive size={20} />,
+      allowedRoles: ["admin", "staff"],
+    },
+    {
+      path: "/admin/users",
+      label: "Users",
+      icon: <Users size={20} />,
+      allowedRoles: ["admin"],
+    },
+    {
+      path: "/admin/roles",
+      label: "Roles",
+      icon: <Siren size={20} />,
+      allowedRoles: ["admin"],
+    },
+  ];
 
   return (
     <div className="drawer-side">
       <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
       <div className="w-64 min-h-screen bg-base-100 border-r">
-        {/* Logo Section */}
         <Link to="/" className="p-4 flex items-center gap-2">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <svg
@@ -33,52 +90,22 @@ const Sidebar = () => {
           <span className="text-xl font-bold">AI</span>
         </Link>
 
-        {/* Navigation */}
         <ul className="menu w-full p-4 space-y-2">
-          <li>
-            <Link
-              to="/admin/dashboard"
-              className={`flex items-center gap-3 ${
-                isActive("/dashboard") ? "active" : ""
-              }`}
-            >
-              <LayoutDashboard size={20} />
-              Dashboard
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/admin/inquries"
-              className={`flex items-center gap-3 ${
-                isActive("/inquries") ? "active" : ""
-              }`}
-            >
-              <MessageCircleQuestion size={20} />
-              Inquries
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/admin/blogs"
-              className={`flex items-center gap-3 ${
-                isActive("/blogs") ? "active" : ""
-              }`}
-            >
-              <TableOfContents size={20} />
-              Blogs
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/admin/events"
-              className={`flex items-center gap-3 ${
-                isActive("/events") ? "active" : ""
-              }`}
-            >
-              <CalendarCheck2 size={20} />
-              Events
-            </Link>
-          </li>
+          {menuItems
+            .filter((item) => item.allowedRoles.includes(userData?.role))
+            .map((item) => (
+              <li key={item.path}>
+                <Link
+                  to={item.path}
+                  className={`flex items-center gap-3 ${
+                    isActive(item.path) ? "active" : ""
+                  }`}
+                >
+                  {item.icon}
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           <hr />
           <li>
             <button

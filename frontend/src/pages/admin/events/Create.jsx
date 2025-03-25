@@ -8,9 +8,10 @@ const Create = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
+    description: "",
     location: "",
     date: "",
-    image: "", // Changed to string for URL
+    image: "",
   });
 
   const handleSubmit = async (e) => {
@@ -20,6 +21,7 @@ const Create = () => {
     try {
       await addDoc(collection(db, "events"), {
         title: formData.title,
+        description: formData.description,
         location: formData.location,
         date: formData.date,
         image: formData.image,
@@ -107,6 +109,21 @@ const Create = () => {
               />
             </div>
           )}
+        </div>
+
+        <div className="form-control grid grid-cols-3 items-center gap-4">
+          <label className="label col-span-1">
+            <span className="label-text">Description</span>
+          </label>
+          <textarea
+            className="textarea col-span-2"
+            placeholder="Description"
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+          >
+            {formData.description}
+          </textarea>
         </div>
 
         <div className="flex gap-4">

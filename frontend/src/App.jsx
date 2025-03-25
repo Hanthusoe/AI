@@ -14,7 +14,14 @@ import Solutions from "./pages/Solutions";
 import EventIndex from "./pages/admin/Events/Index";
 import EventCreate from "./pages/admin/Events/Create";
 import EventEdit from "./pages/admin/Events/Edit";
-import Events from "./pages/Events";
+import Contact from "./pages/Contact";
+import ProjectIndex from "./pages/admin/Projects/Index";
+import Industries from "./pages/Industries";
+import EventDetails from "./pages/events/EventDetails";
+import Inquiries from "./pages/admin/Inquiries";
+import RolesIndex from "./pages/admin/Roles/Index";
+import UsersIndex from "./pages/admin/Users/Index";
+import RoleRoute from "./components/routes/RoleRoute";
 
 export default function App() {
   return (
@@ -25,13 +32,10 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/blogs" element={<BlogLists />} />
             <Route path="/blogs/:id" element={<BlogDetails />} />
+            <Route path="/events/:id" element={<EventDetails />} />
             <Route path="/solutions" element={<Solutions />} />
-            <Route path="/events" element={<Events />} />
-
-            {/* <Route path="/solution" element={<Solution />} />
             <Route path="/industries" element={<Industries />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/contact" element={<Contact />} /> */}
+            <Route path="/contact" element={<Contact />} />
           </Route>
 
           <Route path="/login" element={<Login />} />
@@ -45,10 +49,28 @@ export default function App() {
             }
           >
             <Route path="dashboard" element={<Dashboard />} />
+            <Route
+              path="roles"
+              element={
+                <RoleRoute allowedRoles={["admin"]}>
+                  <RolesIndex />
+                </RoleRoute>
+              }
+            />
+            <Route
+              path="users"
+              element={
+                <RoleRoute allowedRoles={["admin"]}>
+                  <UsersIndex />
+                </RoleRoute>
+              }
+            />
             <Route path="blogs" element={<BlogIndex />} />
+            <Route path="industries" element={<ProjectIndex />} />
             <Route path="events" element={<EventIndex />} />
             <Route path="events/create" element={<EventCreate />} />
             <Route path="events/:id/edit" element={<EventEdit />} />
+            <Route path="inquiries" element={<Inquiries />} />
           </Route>
         </Routes>
       </BrowserRouter>

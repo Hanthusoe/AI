@@ -6,6 +6,7 @@ import {
   persistentMultipleTabManager,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getFunctions } from 'firebase/functions';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -19,10 +20,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
+export const functions = getFunctions(app);
 
-// Initialize Firestore with persistence settings
 export const db = initializeFirestore(app, {
   localCache: persistentLocalCache({
-    tabManager: persistentMultipleTabManager(), // optional: enable multi-tab sync
+    tabManager: persistentMultipleTabManager(),
   }),
 });

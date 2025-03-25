@@ -25,7 +25,6 @@ export default function BlogDetails() {
           const blogData = { id: blogDoc.id, ...blogDoc.data() };
           setBlog(blogData);
 
-          // Fetch related posts
           const relatedQuery = query(
             collection(db, "blogs"),
             where("category", "==", blogData.category),
@@ -73,7 +72,7 @@ export default function BlogDetails() {
   return (
     <div className="min-h-screen bg-base-200 py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Main Blog Content */}
+
         <div className="card bg-base-100 shadow-xl">
           <figure className="h-[400px]">
             <img

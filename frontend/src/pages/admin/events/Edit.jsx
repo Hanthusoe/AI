@@ -9,9 +9,10 @@ const Edit = () => {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: "",
+    description: "",
     location: "",
     date: "",
-    image: "", // Changed to string for URL
+    image: "",
   });
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const Edit = () => {
           const data = docSnap.data();
           setFormData({
             title: data.title,
+            description: data.description,
             location: data.location,
             date: data.date,
             image: data.image,
@@ -45,6 +47,7 @@ const Edit = () => {
     try {
       await updateDoc(doc(db, "events", id), {
         title: formData.title,
+        description: formData.description,
         location: formData.location,
         date: formData.date,
         image: formData.image,
@@ -140,6 +143,21 @@ const Edit = () => {
               />
             </div>
           )}
+        </div>
+
+        <div className="form-control grid grid-cols-3 items-center gap-4">
+          <label className="label col-span-1">
+            <span className="label-text">Description</span>
+          </label>
+          <textarea
+            className="textarea col-span-2"
+            placeholder="Description"
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+          >
+            {formData.description}
+          </textarea>
         </div>
 
         <div className="flex gap-4">

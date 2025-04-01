@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+* {
+  scroll-behavior: smooth;
+}
+
 /* Add these custom styles for the sidebar */
 .menu .active {
   @apply bg-primary;

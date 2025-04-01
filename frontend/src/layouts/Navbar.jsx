@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className="navbar container mx-auto bg-black/80 shadow-sm">
+    <div className="navbar container mx-auto bg-black/80 shadow">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost text-xl">
           <svg

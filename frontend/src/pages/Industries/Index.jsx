@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../config/firebase";
+import { db } from "../../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 const Industries = () => {
   const [projects, setProjects] = useState([]);
@@ -77,24 +78,36 @@ const Industries = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {filteredProjects.map((project) => (
-          <div key={project.id} className="card bg-base-100 shadow-xl">
-            {project.imageUrl && (
-              <figure className="relative">
-                <img
-                  src={project.imageUrl}
-                  alt={project.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute top-4 right-4">
-                  <div className="badge badge-primary capitalize">{project.industry}</div>
-                </div>
-              </figure>
-            )}
-            <div className="card-body">
-              <h2 className="card-title">{project.name}</h2>
-              <p className="text-sm opacity-70">{project.description}</p>
+          <Link to={`/industries/${project.id}`} key={project.id}>
+            <div className="card bg-base-100 shadow-xl">
+              {project.imageUrl && (
+                <figure className="relative">
+                  <img
+                    src={project.imageUrl}
+                    alt={project.name}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute top-4 right-4">
+                    <div className="badge badge-primary capitalize">
+                      {project.industry}
+                    </div>
+                  </div>
+                </figure>
+              )}
+              <div className="card-body">
+                <h2 className="card-title">{project.name}</h2>
+                <p className="text-sm opacity-70 line-clamp-3">
+                  {project.description}
+                </p>
+                <Link
+                  to={`industries/${project.id}`}
+                  className="btn btn-outline"
+                >
+                  See Details
+                </Link>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

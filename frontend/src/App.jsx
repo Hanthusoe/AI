@@ -16,12 +16,13 @@ import EventCreate from "./pages/admin/Events/Create";
 import EventEdit from "./pages/admin/Events/Edit";
 import Contact from "./pages/Contact";
 import ProjectIndex from "./pages/admin/Projects/Index";
-import Industries from "./pages/Industries";
 import EventDetails from "./pages/events/EventDetails";
 import Inquiries from "./pages/admin/Inquiries";
 import RolesIndex from "./pages/admin/Roles/Index";
 import UsersIndex from "./pages/admin/Users/Index";
 import RoleRoute from "./components/routes/RoleRoute";
+import Industries from "./pages/Industries/Index";
+import IndustryDetail from "./pages/Industries/IndustryDetail";
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/events/:id" element={<EventDetails />} />
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/industries" element={<Industries />} />
+            <Route path="/industries/:id" element={<IndustryDetail />} />
             <Route path="/contact" element={<Contact />} />
           </Route>
 

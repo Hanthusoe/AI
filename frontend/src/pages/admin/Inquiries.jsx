@@ -8,8 +8,13 @@ import {
 } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { db } from "../../config/firebase";
+import * as XLSX from "xlsx";
+import { ArrowUpDown, ArrowUp, ArrowDown, FileDown } from "lucide-react";
 
 const Inquiries = () => {
+  const [sortField, setSortField] = useState("id");
+  const [sortDirection, setSortDirection] = useState("desc");
+
   const [inquiries, setInquiries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedInquiry, setSelectedInquiry] = useState(null);
@@ -85,28 +90,122 @@ const Inquiries = () => {
     );
   }
 
+  const handleExport = () => {
+    const exportData = inquiries.map((inquiry) => ({
+      Name: inquiry.name,
+      Email: inquiry.email,
+      Company: inquiry.companyName,
+      Country: inquiry.country,
+      "Job Title": inquiry.jobTitle,
+      Message: inquiry.message,
+      Status: inquiry.status,
+      "Created At": new Date(inquiry.createdAt).toLocaleDateString(),
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Inquiries");
+    XLSX.writeFile(
+      wb,
+      `inquiries_${new Date().toISOString().split("T")[0]}.xlsx`
+    );
+  };
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
+
+  const sortedInquiries = [...inquiries].sort((a, b) => {
+    if (!sortField) return 0;
+
+    if (sortField === "id") {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
+    }
+
+    const aValue = a[sortField].toLowerCase();
+    const bValue = b[sortField].toLowerCase();
+
+    return sortDirection === "asc"
+      ? aValue.localeCompare(bValue)
+      : bValue.localeCompare(aValue);
+  });
+
+  const SortIcon = ({ field }) => {
+    if (sortField !== field) {
+      return <ArrowUpDown size={16} className="opacity-50" />;
+    }
+    return sortDirection === "asc" ? (
+      <ArrowUp size={16} />
+    ) : (
+      <ArrowDown size={16} />
+    );
+  };
+
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Inquiries Management</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Inquiries Management</h2>
+        <button
+          className="btn btn-primary"
+          onClick={handleExport}
+          disabled={inquiries.length === 0}
+        >
+          <FileDown size={20} />
+          Export to Excel
+        </button>
+      </div>
       <div className="overflow-x-auto">
-        <table className="table">
+        <table className="table table-fixed">
           <thead>
             <tr>
               <th>Name</th>
-              <th>Email</th>
               <th>Company</th>
-              <th>Country</th>
-              <th>Job Title</th>
+              <th>
+                <div
+                  className="flex items-center gap-2 cursor-pointer"
+                  onClick={() => handleSort("country")}
+                >
+                  Country
+                  {sortField === "country" && (
+                    <span className="text-xs">
+                      {sortDirection === "asc" ? "↑" : "↓"}
+                    </span>
+                  )}
+                </div>
+              </th>
+              <th>
+                <div
+                  className="flex items-center gap-2 cursor-pointer"
+                  onClick={() => handleSort("jobTitle")}
+                >
+                  Job Title
+                  {sortField === "jobTitle" && (
+                    <span className="text-xs">
+                      {sortDirection === "asc" ? "↑" : "↓"}
+                    </span>
+                  )}
+                </div>
+              </th>
               <th>Message</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {inquiries.map((inquiry) => (
+            {sortedInquiries.map((inquiry) => (
               <tr key={inquiry.id}>
-                <td>{inquiry.name}</td>
-                <td>{inquiry.email}</td>
+                <td>
+                  {inquiry.name}
+                  <br />
+                  <small className="text-gray-500">{inquiry.email}</small>
+                </td>
                 <td>{inquiry.companyName}</td>
                 <td>{inquiry.country}</td>
                 <td>{inquiry.jobTitle}</td>

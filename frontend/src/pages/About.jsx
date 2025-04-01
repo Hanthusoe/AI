@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const About = () => {
   return (
     <section className="py-20 bg-base-200">
@@ -30,8 +32,12 @@ const About = () => {
               thrive in the digital era.
             </p>
             <div className="flex gap-4">
-              <button className="btn btn-primary">Learn More</button>
-              <button className="btn btn-outline">Contact Us</button>
+              <a href="#services" className="btn btn-primary">
+                Learn More
+              </a>
+              <Link to="/contact" className="btn btn-outline">
+                Contact Us
+              </Link>
             </div>
           </div>
         </div>

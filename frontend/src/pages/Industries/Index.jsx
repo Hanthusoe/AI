@@ -100,7 +100,7 @@ const Industries = () => {
                   {project.description}
                 </p>
                 <Link
-                  to={`industries/${project.id}`}
+                  to={`/industries/${project.id}`}
                   className="btn btn-outline"
                 >
                   See Details

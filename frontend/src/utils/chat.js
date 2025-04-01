@@ -2,7 +2,7 @@ import { OpenAI } from "openai";
 
 const client = new OpenAI({
   baseURL: "https://router.huggingface.co/together/v1",
-  apiKey: "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",
+  apiKey: import.meta.env.VITE_HF_API_KEY,
   dangerouslyAllowBrowser: true, // for local browsers
 });
 
